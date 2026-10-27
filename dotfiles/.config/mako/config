@@ -1,0 +1,17 @@
+# Minimal Catppuccin Mocha notifications
+font=JetBrainsMono Nerd Font 10
+background-color=#181825
+text-color=#cdd6f4
+border-color=#b4befe
+border-size=1
+border-radius=0
+padding=12
+margin=8
+width=380
+height=120
+max-visible=4
+default-timeout=5000
+ignore-timeout=0
+anchor=top-right
+layer=overlay
+sort=-time

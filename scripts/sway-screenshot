@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# Capture a selected rectangle. Usage: sway-screenshot [save|copy]
+set -euo pipefail
+
+mode="${1:-save}"
+case "$mode" in
+  save|copy) ;;
+  *) printf 'Usage: %s [save|copy]\n' "${0##*/}" >&2; exit 2 ;;
+esac
+
+if ! command -v slurp >/dev/null 2>&1 || ! command -v grim >/dev/null 2>&1; then
+  printf 'Missing dependency: install grim and slurp.\n' >&2
+  exit 127
+fi
+
+geometry="$(slurp 2>/dev/null)" || exit 0
+[[ -n "$geometry" ]] || exit 0
+
+if [[ "$mode" == "copy" ]]; then
+  command -v wl-copy >/dev/null 2>&1 || { printf 'Missing dependency: wl-clipboard.\n' >&2; exit 127; }
+  grim -g "$geometry" - | wl-copy --type image/png
+  exit 0
+fi
+
+target_dir="${XDG_PICTURES_DIR:-$HOME/Pictures}/Screenshots"
+mkdir -p "$target_dir"
+filename="$(date +%F_%H-%M-%S).png"
+target="$target_dir/$filename"
+if [[ -e "$target" ]]; then
+  target="$target_dir/$(date +%F_%H-%M-%S)-$(date +%N).png"
+fi
+grim -g "$geometry" "$target"
+printf 'Screenshot saved: %s\n' "$target"
+if command -v notify-send >/dev/null 2>&1; then
+  notify-send 'Screenshot saved' "$target" >/dev/null 2>&1 || true
+fi

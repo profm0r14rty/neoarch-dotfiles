@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Select a clipboard entry with Fuzzel and restore it to the Wayland clipboard.
+set -euo pipefail
+
+for cmd in cliphist fuzzel wl-copy; do
+  if ! command -v "$cmd" >/dev/null 2>&1; then
+    printf 'Missing dependency: %s\n' "$cmd" >&2
+    exit 127
+  fi
+done
+
+selection="$(cliphist list | fuzzel --dmenu --prompt='Clipboard › ' --width=64)" || exit 0
+[[ -n "$selection" ]] || exit 0
+printf '%s\n' "$selection" | cliphist decode | wl-copy

@@ -1,0 +1,166 @@
+# Minimal Sway configuration — Catppuccin Mocha
+# Portable defaults first; machine-specific outputs and app rules belong in config.d/.
+
+# ── Variables ────────────────────────────────────────────────────────────────
+set $mod Mod4
+set $left h
+set $down j
+set $up k
+set $right l
+set $term foot
+set $menu fuzzel
+
+# ── Appearance ───────────────────────────────────────────────────────────────
+font pango:JetBrainsMono Nerd Font 10
+
+# Small gaps, pixel borders, no title bars: keep the UI quiet and focused.
+default_border pixel 2
+default_floating_border pixel 2
+hide_edge_borders smart
+gaps inner 8
+gaps outer 4
+focus_follows_mouse no
+focus_wrapping workspace
+title_align center
+
+# Catppuccin Mocha
+#                  border    background  text       indicator  child border
+client.focused     #b4befe   #1e1e2e     #cdd6f4    #b4befe    #b4befe
+client.focused_inactive #45475a #181825   #a6adc8    #45475a    #45475a
+client.unfocused   #313244   #181825     #a6adc8    #313244    #313244
+client.urgent      #f38ba8   #1e1e2e     #f38ba8    #f38ba8    #f38ba8
+client.placeholder #313244   #181825     #cdd6f4    #313244    #313244
+
+# Portable solid-color background. Replace this with a local wallpaper rule if desired.
+output * bg #11111b solid_color
+
+# ── Input ────────────────────────────────────────────────────────────────────
+input type:keyboard {
+    # Uncomment and set xkb_layout below only if you want to force a specific layout.
+    repeat_delay 250
+    repeat_rate 40
+}
+
+input type:touchpad {
+    tap enabled
+    natural_scroll enabled
+    dwt enabled
+}
+
+floating_modifier $mod normal
+
+# ── Launchers and session controls ───────────────────────────────────────────
+bindsym $mod+Return exec $term
+bindsym $mod+d exec $menu
+bindsym $mod+Shift+o exec thunar
+bindsym $mod+b exec xdg-open https://duckduckgo.com
+bindsym $mod+q kill
+bindsym $mod+Shift+c reload
+bindsym $mod+Shift+e exec swaynag -t warning -m 'Exit Sway?' -B 'Exit' 'swaymsg exit'
+bindsym $mod+Escape exec swaylock -f
+
+# Common utilities
+bindsym $mod+Shift+n exec $term -e nmtui
+bindsym $mod+Shift+b exec $term --app-id=rice-btop -e btop
+bindsym $mod+Shift+v exec $term --app-id=rice-cava -e cava
+bindsym $mod+Shift+p exec ~/.local/bin/cliphist-menu
+bindsym Print exec ~/.local/bin/sway-screenshot save
+bindsym $mod+Shift+s exec ~/.local/bin/sway-screenshot copy
+
+# ── Focus and movement (Vim keys) ────────────────────────────────────────────
+bindsym $mod+$left focus left
+bindsym $mod+$down focus down
+bindsym $mod+$up focus up
+bindsym $mod+$right focus right
+
+bindsym $mod+Shift+$left move left
+bindsym $mod+Shift+$down move down
+bindsym $mod+Shift+$up move up
+bindsym $mod+Shift+$right move right
+
+bindsym $mod+Ctrl+$left focus output left
+bindsym $mod+Ctrl+$right focus output right
+bindsym $mod+Ctrl+Shift+$left move workspace to output left
+bindsym $mod+Ctrl+Shift+$right move workspace to output right
+
+# ── Workspaces ───────────────────────────────────────────────────────────────
+bindsym $mod+1 workspace number 1
+bindsym $mod+2 workspace number 2
+bindsym $mod+3 workspace number 3
+bindsym $mod+4 workspace number 4
+bindsym $mod+5 workspace number 5
+bindsym $mod+6 workspace number 6
+bindsym $mod+7 workspace number 7
+bindsym $mod+8 workspace number 8
+bindsym $mod+9 workspace number 9
+bindsym $mod+0 workspace number 10
+
+bindsym $mod+Shift+1 move container to workspace number 1
+bindsym $mod+Shift+2 move container to workspace number 2
+bindsym $mod+Shift+3 move container to workspace number 3
+bindsym $mod+Shift+4 move container to workspace number 4
+bindsym $mod+Shift+5 move container to workspace number 5
+bindsym $mod+Shift+6 move container to workspace number 6
+bindsym $mod+Shift+7 move container to workspace number 7
+bindsym $mod+Shift+8 move container to workspace number 8
+bindsym $mod+Shift+9 move container to workspace number 9
+bindsym $mod+Shift+0 move container to workspace number 10
+
+# ── Layout and resize ────────────────────────────────────────────────────────
+bindsym $mod+backslash splith
+bindsym $mod+Shift+backslash splitv
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+bindsym $mod+f fullscreen
+bindsym $mod+Shift+space floating toggle
+bindsym $mod+space focus mode_toggle
+bindsym $mod+Shift+minus move container to scratchpad
+bindsym $mod+minus scratchpad show
+
+mode "resize" {
+    bindsym $left resize shrink width 40 px
+    bindsym $down resize grow height 40 px
+    bindsym $up resize shrink height 40 px
+    bindsym $right resize grow width 40 px
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+r mode "resize"
+
+# ── Media and hardware keys ──────────────────────────────────────────────────
+bindsym --locked XF86AudioRaiseVolume exec wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 5%+
+bindsym --locked XF86AudioLowerVolume exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
+bindsym --locked XF86AudioMute exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+bindsym --locked XF86MonBrightnessUp exec brightnessctl set 5%+
+bindsym --locked XF86MonBrightnessDown exec brightnessctl set 5%-
+bindsym --locked XF86AudioPlay exec playerctl play-pause
+bindsym --locked XF86AudioNext exec playerctl next
+bindsym --locked XF86AudioPrev exec playerctl previous
+
+# ── Window behavior ──────────────────────────────────────────────────────────
+for_window [app_id="pavucontrol"] floating enable
+for_window [class="Pavucontrol"] floating enable
+for_window [app_id="nm-connection-editor"] floating enable
+for_window [window_role="pop-up"] floating enable
+for_window [window_role="dialog"] floating enable
+for_window [app_id="rice-btop"] floating enable, resize set width 1100 px height 680 px, move position center
+for_window [app_id="rice-cava"] floating enable, resize set width 1000 px height 320 px, move position center
+
+# Local-only overrides: copy an example from examples/ into this directory and edit it.
+include ~/.config/sway/config.d/*.conf
+
+# ── Autostart ────────────────────────────────────────────────────────────────
+bar {
+    swaybar_command waybar
+}
+
+exec mako
+exec wl-paste --type text --watch cliphist store
+exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+exec swayidle -w \
+    timeout 300 'swaylock -f' \
+    timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
+    before-sleep 'swaylock -f'
+
+# Keep Arch's packaged Sway/portal environment helpers, if present.
+include /etc/sway/config.d/*

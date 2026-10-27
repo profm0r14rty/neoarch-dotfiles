@@ -1,0 +1,81 @@
+{
+  "layer": "top",
+  "position": "top",
+  "height": 34,
+  "spacing": 6,
+  "margin-top": 0,
+  "margin-left": 0,
+  "margin-right": 0,
+  "modules-left": ["sway/workspaces", "sway/mode", "sway/window"],
+  "modules-center": ["clock"],
+  "modules-right": ["cpu", "memory", "disk", "network", "pulseaudio", "battery", "tray"],
+
+  "sway/workspaces": {
+    "disable-scroll": true,
+    "all-outputs": false,
+    "format": "{name}"
+  },
+  "sway/mode": {
+    "format": "MODE {}"
+  },
+  "sway/window": {
+    "max-length": 48,
+    "all-outputs": false
+  },
+
+  "clock": {
+    "interval": 30,
+    "format": "{:%a %d %b  %H:%M}",
+    "tooltip-format": "{:%A, %d %B %Y}\n{calendar}"
+  },
+
+  "cpu": {
+    "interval": 2,
+    "format": "CPU {usage}%",
+    "tooltip": true,
+    "on-click": "foot --app-id=rice-btop -e btop"
+  },
+  "memory": {
+    "interval": 3,
+    "format": "RAM {percentage}%",
+    "tooltip-format": "{used:0.1f} GiB used / {total:0.1f} GiB"
+  },
+  "disk": {
+    "interval": 30,
+    "path": "/",
+    "format": "ROOT {percentage_used}%",
+    "tooltip-format": "{free} free of {total}"
+  },
+  "network": {
+    "interval": 5,
+    "format-wifi": "NET {signalStrength}%",
+    "format-ethernet": "NET LAN",
+    "format-linked": "NET LINK",
+    "format-disconnected": "NET OFF",
+    "tooltip-format-wifi": "{essid} ({signalStrength}%)",
+    "tooltip-format-ethernet": "{ifname}",
+    "on-click": "foot -e nmtui"
+  },
+  "pulseaudio": {
+    "format": "VOL {volume}%",
+    "format-muted": "VOL MUTE",
+    "tooltip-format": "{desc}",
+    "on-click": "pavucontrol",
+    "on-scroll-up": "wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 2%+",
+    "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%-"
+  },
+  "battery": {
+    "states": {
+      "warning": 25,
+      "critical": 12
+    },
+    "format": "BAT {capacity}%",
+    "format-charging": "CHG {capacity}%",
+    "format-warning": "BAT {capacity}%",
+    "format-critical": "BAT {capacity}%",
+    "tooltip-format": "{time} remaining"
+  },
+  "tray": {
+    "spacing": 8
+  }
+}

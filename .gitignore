@@ -1,0 +1,22 @@
+# Backups and temporary files
+*.bak
+*.backup
+*.orig
+*.tmp
+
+# Local machine overrides and private files
+.env
+.env.*
+**/config.d/*local*.conf
+**/config.d/*private*.conf
+
+# Editors / backups
+*~
+*.swp
+*.swo
+.DS_Store
+
+# Accidental credentials
+*.pem
+*.p12
+*.pfx

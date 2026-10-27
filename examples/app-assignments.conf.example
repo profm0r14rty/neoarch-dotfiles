@@ -1,0 +1,10 @@
+# Save a copy as ~/.config/sway/config.d/80-app-assignments.conf after editing.
+# Inspect real app_id / class values with:
+#   swaymsg -t get_tree | jq '.. | objects | select(.type? == "con") | {name, app_id, window_properties}'
+# Do not assume these sample identifiers match your apps/builds.
+
+# Example Wayland app_id:
+# assign [app_id="firefox"] workspace number 2
+
+# Example XWayland class:
+# assign [class="Gimp"] workspace number 6

@@ -1,0 +1,5 @@
+# Optional: install only what you actually use.
+firefox
+mpv
+fastfetch
+wdisplays
