@@ -61,6 +61,28 @@ window#waybar {
   padding: 0 10px;
 }
 
+/* Caffeine toggle */
+#custom-caffeine {
+  font-size: 14px;
+  padding: 0 10px;
+  border-left: 1px solid #242436;
+  color: #6c7086;
+}
+
+#custom-caffeine.off {
+  color: #6c7086;
+}
+
+#custom-caffeine.on {
+  color: #f9e2af;
+  background: #1e1e2e;
+}
+
+#custom-caffeine:hover {
+  color: #cdd6f4;
+  background: #181825;
+}
+
 #cpu, #memory, #disk, #network, #pulseaudio, #battery, #tray {
   padding: 0 9px;
   border-left: 1px solid #242436;

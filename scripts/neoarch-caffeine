@@ -1,0 +1,79 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+runtime_dir="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
+state_file="$runtime_dir/neoarch-caffeine"
+unit="neoarch-caffeine-inhibit"
+action="${1:-status}"
+
+is_on() {
+    [[ -e "$state_file" ]]
+}
+
+refresh_waybar() {
+    pkill -RTMIN+8 -x waybar >/dev/null 2>&1 || true
+}
+
+notify() {
+    if command -v notify-send >/dev/null 2>&1; then
+        notify-send -a neoarch-dotfiles \
+            "Caffeine mode" "$1" || true
+    fi
+}
+
+status() {
+    if is_on; then
+        printf '{"text":"","class":"on","tooltip":"Caffeine ON — idle lock and sleep inhibited"}\n'
+    else
+        printf '{"text":"","class":"off","tooltip":"Caffeine OFF — click to keep the system awake"}\n'
+    fi
+}
+
+toggle() {
+    if is_on; then
+        if systemctl --user is-active --quiet "${unit}.service"; then
+            systemctl --user stop "${unit}.service"
+        fi
+
+        rm -f -- "$state_file"
+        notify "Off — idle locking and sleep are restored."
+    else
+        if ! systemctl --user is-active --quiet "${unit}.service"; then
+            systemd-run --user --quiet --collect --unit="$unit" \
+                /usr/bin/systemd-inhibit --what=idle:sleep \
+                --who=neoarch-dotfiles \
+                --why="Caffeine mode enabled" \
+                --mode=block /usr/bin/sleep infinity
+        fi
+
+        : > "$state_file"
+        notify "On — idle locking and system sleep are inhibited."
+    fi
+
+    refresh_waybar
+}
+
+case "$action" in
+    status)
+        status
+        ;;
+    toggle)
+        toggle
+        ;;
+    idle-lock)
+        if is_on; then
+            exit 0
+        fi
+        exec swaylock -f
+        ;;
+    display-off)
+        if is_on; then
+            exit 0
+        fi
+        exec swaymsg "output * power off"
+        ;;
+    *)
+        printf 'Usage: %s {status|toggle|idle-lock|display-off}\n' "$0" >&2
+        exit 2
+        ;;
+esac

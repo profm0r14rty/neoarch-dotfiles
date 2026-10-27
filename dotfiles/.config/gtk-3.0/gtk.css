@@ -1,0 +1,40 @@
+/* Neoarch calendar palette */
+calendar {
+  color: #cdd6f4;
+  background-color: #181825;
+  border: 1px solid #45475a;
+  padding: 8px;
+}
+
+calendar.header {
+  color: #b4befe;
+  background-color: #1e1e2e;
+  border-bottom: 1px solid #313244;
+}
+
+calendar.button {
+  color: #a6adc8;
+  background-color: #1e1e2e;
+  border-radius: 4px;
+  padding: 4px;
+}
+
+calendar.button:hover {
+  color: #cdd6f4;
+  background-color: #313244;
+}
+
+calendar:selected {
+  color: #11111b;
+  background-color: #b4befe;
+  border-radius: 4px;
+}
+
+calendar.highlight {
+  color: #89b4fa;
+  font-weight: bold;
+}
+
+calendar:indeterminate {
+  color: #6c7086;
+}

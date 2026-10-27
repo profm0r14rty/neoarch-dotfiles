@@ -12,7 +12,10 @@ inside-wrong-color=f38ba8
 ring-wrong-color=f38ba8
 inside-clear-color=f9e2af
 ring-clear-color=f9e2af
-indicator-radius=96
-indicator-thickness=8
+indicator-radius=84
+indicator-thickness=6
 font=JetBrainsMono Nerd Font
 font-size=18
+indicator-idle-visible
+hide-keyboard-layout
+show-failed-attempts

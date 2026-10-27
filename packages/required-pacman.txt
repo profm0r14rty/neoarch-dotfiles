@@ -35,3 +35,4 @@ libnotify
 btop
 jq
 git
+gsimplecal

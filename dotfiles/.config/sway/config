@@ -59,6 +59,9 @@ bindsym $mod+Shift+c reload
 bindsym $mod+Shift+e exec swaynag -t warning -m 'Exit Sway?' -B 'Exit' 'swaymsg exit'
 bindsym $mod+Escape exec swaylock -f
 
+# Toggle caffeine mode
+bindsym $mod+Ctrl+c exec ~/.local/bin/neoarch-caffeine toggle
+
 # Common utilities
 bindsym $mod+Shift+n exec $term -e nmtui
 bindsym $mod+Shift+b exec $term --app-id=rice-btop -e btop
@@ -138,6 +141,9 @@ bindsym --locked XF86AudioNext exec playerctl next
 bindsym --locked XF86AudioPrev exec playerctl previous
 
 # ── Window behavior ──────────────────────────────────────────────────────────
+# Calendar popup
+for_window [app_id="gsimplecal"] floating enable, border pixel 1
+for_window [class="gsimplecal"] floating enable, border pixel 1
 for_window [app_id="pavucontrol"] floating enable
 for_window [class="Pavucontrol"] floating enable
 for_window [app_id="nm-connection-editor"] floating enable
@@ -145,9 +151,6 @@ for_window [window_role="pop-up"] floating enable
 for_window [window_role="dialog"] floating enable
 for_window [app_id="rice-btop"] floating enable, resize set width 1100 px height 680 px, move position center
 for_window [app_id="rice-cava"] floating enable, resize set width 1000 px height 320 px, move position center
-
-# Local-only overrides: copy an example from examples/ into this directory and edit it.
-include ~/.config/sway/config.d/*.conf
 
 # ── Autostart ────────────────────────────────────────────────────────────────
 bar {
@@ -158,9 +161,12 @@ exec mako
 exec wl-paste --type text --watch cliphist store
 exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 exec swayidle -w \
-    timeout 300 'swaylock -f' \
-    timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
+    timeout 300 '~/.local/bin/neoarch-caffeine idle-lock' \
+    timeout 600 '~/.local/bin/neoarch-caffeine display-off' resume 'swaymsg "output * power on"' \
     before-sleep 'swaylock -f'
 
 # Keep Arch's packaged Sway/portal environment helpers, if present.
 include /etc/sway/config.d/*
+
+# Load personal machine-specific overrides last.
+include ~/.config/sway/config.d/*.conf
